@@ -1,9 +1,18 @@
 #include <stdio.h>
 #include <assert.h>
+#include "product_config.h"
+
+#ifdef PRODUCTION
+#include <network_alerter.h>
+#endif
 
 int alertFailureCount = 0;
 
-char TestNetworAlertStatus = 0;
+#ifdef UNIT_TEST
+
+#define networkAlert    networkAlertStub
+int TestNetworAlertStatus = 0;
+
 // Stub function will return the networkAlert status based on the simulated value in test cases
 int networkAlertStub(float celcius) {
     printf("ALERT: Temperature is %.1f celcius.\n", celcius);
@@ -12,10 +21,11 @@ int networkAlertStub(float celcius) {
     // stub always succeeds and returns 200
     return TestNetworAlertStatus;
 }
+#endif
 
 void alertInCelcius(float farenheit) {
     float celcius = (farenheit - 32) * 5 / 9;
-    int returnCode = networkAlertStub(celcius);
+    int returnCode = networkAlert(celcius);
     if (returnCode != 200) {
         // non-ok response is not an error! Issues happen in life!
         // let us keep a count of failures to report
