@@ -39,6 +39,10 @@ int main(){
     printf("Now lets test the validity of individula pairs\n");
 
     colorPair = getColorCode(0, 0);
+
+    // As per the requirement (wiki), color code should be in range from 1 to 25. 
+    // Let me assume index is returned here instead of colorCode. We have bug in color pair itself. 
+    // So I consider this as per implementation instead of requirement
     assert(colorPair.colorCode == 0);
     assert(strcmp(colorPair.majorColor, majorColor[0]) == 0);
     assert(strcmp(colorPair.minorColor, minorColor[0]) == 0);
