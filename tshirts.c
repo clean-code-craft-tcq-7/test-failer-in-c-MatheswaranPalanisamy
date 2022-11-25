@@ -14,17 +14,22 @@ char size(int cms) {
 }
 
 int main() {
+    // Test case 1: Validate the size 'S'
     assert(size(37) == 'S');
-
+    // Test case 2: Validate the size 'S' upper boundary
     assert(size(38) == 'S');
+    // Test case 3: Validate the size 'M' lower boundary
     assert(size(38) == 'M');
-
+    // Test case 4: Validate the size 'M'
     assert(size(40) == 'M');
-
+    // Test case 5: Validate the size 'M' upper boundary
     assert(size(42) == 'M');
+    // Test case 6: Validate the size 'L' lower boundary
     assert(size(42) == 'L');
-
+    // Test case 7: Validate the size 'L' range
     assert(size(43) == 'L');
+
+    // Conclusion: Here the sizes 38 and 42 are not considered for any of the sizeName check
     printf("All is well (maybe!)\n");
     return 0;
 }

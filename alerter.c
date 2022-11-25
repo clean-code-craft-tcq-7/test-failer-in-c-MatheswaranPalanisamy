@@ -9,7 +9,7 @@
 int alertFailureCount = 0;
 
 #ifdef UNIT_TEST
-
+// Stub will be alive for the unit test build
 #define networkAlert    networkAlertStub
 int TestNetworAlertStatus = 0;
 
@@ -18,7 +18,7 @@ int networkAlertStub(float celcius) {
     printf("ALERT: Temperature is %.1f celcius.\n", celcius);
     // Return 200 for ok
     // Return 500 for not-ok
-    // stub always succeeds and returns 200
+    // stub shall return the status simulated in the test cases
     return TestNetworAlertStatus;
 }
 #endif
@@ -36,17 +36,21 @@ void alertInCelcius(float farenheit) {
 }
 
 int main() {
+    // Testcase 1: Test networkAleter success
     // simulate TestNetworAlertStatus for success
     TestNetworAlertStatus = 200;
     alertInCelcius(400.5);
     assert(alertFailureCount == 0);
     printf("%d alerts failed.\n", alertFailureCount);
 
+    // Testcase 2: Test networkAleretr failure
     // simulate TestNetworAlertStatus for failure
     TestNetworAlertStatus = 500;
     alertInCelcius(303.6);
     assert(alertFailureCount == 1);
     printf("%d alerts failed.\n", alertFailureCount);
+
+    // Test cases to validate faranheit to celcius calculation shall be extended with all possible boundary conditions
 
     printf("All is well (maybe!)\n");
     return 0;
