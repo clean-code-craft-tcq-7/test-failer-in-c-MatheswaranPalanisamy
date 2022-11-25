@@ -3,12 +3,14 @@
 
 int alertFailureCount = 0;
 
+char TestNetworAlertStatus = 0;
+// Stub function will return the networkAlert status based on the simulated value in test cases
 int networkAlertStub(float celcius) {
     printf("ALERT: Temperature is %.1f celcius.\n", celcius);
     // Return 200 for ok
     // Return 500 for not-ok
     // stub always succeeds and returns 200
-    return 200;
+    return TestNetworAlertStatus;
 }
 
 void alertInCelcius(float farenheit) {
@@ -24,9 +26,18 @@ void alertInCelcius(float farenheit) {
 }
 
 int main() {
+    // simulate TestNetworAlertStatus for success
+    TestNetworAlertStatus = 200;
     alertInCelcius(400.5);
-    alertInCelcius(303.6);
+    assert(alertFailureCount == 0);
     printf("%d alerts failed.\n", alertFailureCount);
+
+    // simulate TestNetworAlertStatus for failure
+    TestNetworAlertStatus = 500;
+    alertInCelcius(303.6);
+    assert(alertFailureCount == 1);
+    printf("%d alerts failed.\n", alertFailureCount);
+
     printf("All is well (maybe!)\n");
     return 0;
 }
