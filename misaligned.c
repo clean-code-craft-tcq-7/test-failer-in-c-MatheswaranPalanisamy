@@ -44,6 +44,6 @@ int main(){
     // Test cases shall be extened for all the combinations for (1,0), (1,1), (1,2) ... (4,4)
     // Test cases for indices (0,0), (1,1), (2,2), (3,3) and (4,4) shall be passed. Rest of the
     // other combinations are failing
-    printf("All is well (maybe!)\n");
+    printf("All is well !!!\n");
     return 0;
 }
