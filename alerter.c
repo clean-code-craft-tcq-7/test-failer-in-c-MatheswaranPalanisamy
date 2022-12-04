@@ -1,57 +1,45 @@
 #include <stdio.h>
-#include <assert.h>
-#include "product_config.h"
 
-#ifdef PRODUCTION
-#include <network_alerter.h>
-#endif
+#include "alerter.h"
+#include "network_alerter.h"
 
+#include "alerter_test.h"
+
+// For the production code real networkAlert
+networkAlert_fptr ptr_networkAlert = networkAlert;
 int alertFailureCount = 0;
 
-#ifdef UNIT_TEST
-// Stub will be alive for the unit test build
-#define networkAlert    networkAlertStub
-int TestNetworAlertStatus = 0;
-
-// Stub function will return the networkAlert status based on the simulated value in test cases
-int networkAlertStub(float celcius) {
-    printf("ALERT: Temperature is %.1f celcius.\n", celcius);
-    // Return 200 for ok
-    // Return 500 for not-ok
-    // stub shall return the status simulated in the test cases
-    return TestNetworAlertStatus;
+float convertFaranheitToCelcius(float farenheit)
+{
+    return (farenheit - 32) * 5 / 9;
 }
-#endif
 
-void alertInCelcius(float farenheit) {
-    float celcius = (farenheit - 32) * 5 / 9;
-    int returnCode = networkAlert(celcius);
+void alertInCelcius(float farenheit) 
+{
+    float celcius = convertFaranheitToCelcius(farenheit);
+    int returnCode = ptr_networkAlert(celcius);
     if (returnCode != 200) {
         // non-ok response is not an error! Issues happen in life!
         // let us keep a count of failures to report
         // However, this code doesn't count failures!
         // Add a test below to catch this bug. Alter the stub above, if needed.
-        alertFailureCount += 0;
+        alertFailureCount += 1;
     }
 }
 
 int main() {
-    // Testcase 1: Test networkAleter success
-    // simulate TestNetworAlertStatus for success
-    TestNetworAlertStatus = 200;
-    alertInCelcius(400.5);
-    assert(alertFailureCount == 0);
-    printf("%d alerts failed.\n", alertFailureCount);
-
-    // Testcase 2: Test networkAleretr failure
-    // simulate TestNetworAlertStatus for failure
-    TestNetworAlertStatus = 500;
-    alertInCelcius(303.6);
-    assert(alertFailureCount == 1);
-    printf("%d alerts failed.\n", alertFailureCount);
-
-    // Test cases to validate faranheit to celcius calculation shall be extended with all possible boundary conditions
-
-    printf("All is well (maybe!)\n");
+    // Testcase 1: Test the temperature converter for negetive value faranheit
+    testTemperatureConverter(-25.05, -31.69);
+    // Testcase 2: Test the temperature converter for 0 faranheit
+    testTemperatureConverter(0, -17.78);
+    // Testcase 3: Test the temperature converter for positive value faranheit
+    testTemperatureConverter(78.87, 26.03);
+    // Testcase 4: Test alerter for return code 200
+    testAlerter(93.75, 200);
+    // Testcase 5: Test alerter for return code 404
+    testAlerter(45.07, 404);
+    // Testcase 5: Test alerter for return code 500
+    testAlerter(31.23, 500);
+    printf("All is well !!!\n");
     return 0;
 }
