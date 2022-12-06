@@ -1,5 +1,2 @@
-// Functon pointer for network alerter
-typedef int (*networkAlert_fptr)(float);
-
-void alertInCelcius(float farenheit);
+void alertInCelcius(float farenheit, int (*networkAlert_fptr)(float));
 float convertFaranheitToCelcius(float faranheit);

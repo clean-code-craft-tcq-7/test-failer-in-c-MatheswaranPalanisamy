@@ -1,12 +1,8 @@
 #include <stdio.h>
 
 #include "alerter.h"
-#include "network_alerter.h"
-
 #include "alerter_test.h"
 
-// For the production code real networkAlert
-networkAlert_fptr ptr_networkAlert = networkAlert;
 int alertFailureCount = 0;
 
 float convertFaranheitToCelcius(float farenheit)
@@ -14,10 +10,10 @@ float convertFaranheitToCelcius(float farenheit)
     return (farenheit - 32) * 5 / 9;
 }
 
-void alertInCelcius(float farenheit) 
+void alertInCelcius(float farenheit, int (*networkAlert_fptr)(float)) 
 {
     float celcius = convertFaranheitToCelcius(farenheit);
-    int returnCode = ptr_networkAlert(celcius);
+    int returnCode = networkAlert_fptr(celcius);
     if (returnCode != 200) {
         // non-ok response is not an error! Issues happen in life!
         // let us keep a count of failures to report
