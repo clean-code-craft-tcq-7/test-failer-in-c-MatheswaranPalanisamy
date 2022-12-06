@@ -3,9 +3,7 @@
 #include <assert.h>
 #include <math.h>
 #include "alerter.h"
-#include "network_alerter.h"
 
-extern networkAlert_fptr ptr_networkAlert;
 extern int alertFailureCount;
 
 int TestNetworAlertStatus = 0;
@@ -24,11 +22,10 @@ void testAlerter(float farenheit, int return_code)
 {
     // Setup for the test environment
     int alert_failure_count = alertFailureCount;
-    ptr_networkAlert = networkAlertStub;
     TestNetworAlertStatus = return_code;
 
     // Test the function under test
-    alertInCelcius(farenheit);
+    alertInCelcius(farenheit, networkAlertStub);
 
     // Check for the intended result
     if(return_code == 200)
@@ -39,9 +36,6 @@ void testAlerter(float farenheit, int return_code)
     {
         assert(alertFailureCount == alert_failure_count + 1);
     }
-
-    // Tear down the test setup by mapping the actual production function
-    ptr_networkAlert = networkAlert;
 }
 
 // Tester function which tests the 
